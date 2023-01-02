@@ -1,14 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
+import Btn from './components/Btn';
 
-function Header() {
-  return (
-    <h1>Hello World!</h1>
-  )
-}
 function App() {
   return (
-    <Header />  //rendering 
+    <div>
+      <Btn />
+    </div>
+
   )
 }
 
