@@ -1,27 +1,24 @@
-import React, { useState, createContext, useContext } from 'react';
+import React from 'react';
 import './App.css';
-import Heading from './components/Heading';
+import { Routes, Route, Link } from 'react-router-dom';
 
-const themeDefault = { border: '10px solid green' };
-const themeContext = createContext(themeDefault);
+import Homepage from './components/Homepage';
+import AboutMe from './components/AboutMe';
+
 
 function App() {
-  const [word,setWord] = useState('Eat ');
-  const theme = useContext(themeContext);
-  console.log(theme)
-
-  
-  function handleClick() {
-    setWord('Stay ');
-  }
-  
   return (
-    <div className="App">
-      <Heading message={word + "at Little lemon"} />
-      <button onClick={handleClick}>Click me</button>
+    <div className='App'>
+      <nav className='nav'>
+        <Link to="/" className="nav-item">Homepage</Link>
+        <Link to="/about-me" className="nav-item">About me</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/about-me" element={<AboutMe />} />
+      </Routes>
+      
     </div>
-
-  )
+  );
 }
-
 export default App;
