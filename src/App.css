@@ -3,6 +3,10 @@
   margin: 40px;
 }
 
+div {
+  padding: 30px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
