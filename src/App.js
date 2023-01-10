@@ -1,92 +1,99 @@
-import React, {useState} from 'react';
-import "./App.css";
-import { Select } from '@material-ui/core';
+// import "./App.css";
+import { useState } from "react";
+import * as EmailValidator from 'email-validator';
 
-// const ToDo = props => {
-//   return(
-//     <tr>
-//     <td>
-//       <label>{props.id}</label>
-//     </td>
-//     <td>
-//       <input />
-//     </td>
-//     <td>
-//       <label>{props.createdAt}</label>
-//     </td>
-//   </tr>
-//   )
-  
-// }
+const PasswordErrorMessage = () => {
+  return (
+    <p className="FieldError">Password should have at least 8 characters</p>
+  );
+};
 
-// function App() {
-//   const [todos,setTodos] = useState([{
-//       id: 'todo1',
-//       createdAt: '18:00',
-//     }, {
-//       id: 'todo2',
-//       createdAt: '20:00',
-//     }]);
-  
-//   const reverseList = () => {
-//     setTodos([...todos].reverse());  
-//   }
+function App() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState({
+    value: "",
+    isTouched: false,
+  });
+  const [role, setRole] = useState("role");
 
-//   return (
-//     <div className="App">
-//       <h2>To do List</h2>
-//       <button onClick={reverseList}>Reverse</button>
-//       <table>
-//         <tbody>
-//           {todos.map((todo,index) => (
-//             <ToDo key={index} id={todo.id} createdAt={todo.createdAt}/>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// }
+  const getIsFormValid = () => {
+    return (
+      firstName &&
+      EmailValidator.validate(email) &&
+      password.value.length >=8 &&
+      role !== "role"
+    )
+  };
 
-function App () {
-  const [score, setScore] = useState("10");
-  const [comment, setComment] = useState('');
+  const clearForm = () => {
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    setPassword({value:"", isTouched: false});
+    setRole("Role");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (Number(score)<= 5 && comment.length <=10 ) {
-      alert("Please provide a comment explaining why the experience was poor.");
-      return;
-    }
-
-    console.log("Form submitted");
-    setComment('');
-    setScore("10");
-  }
+    alert("Account created!");
+    clearForm();
+  };
 
   return (
-    <div className='App'>
+    <div className="App">
       <form onSubmit={handleSubmit}>
         <fieldset>
-          <h2>Feedback Form</h2>
-          <div className='Field'>
-            <label htmlFor='rating'>How was it? {score} ⭐️ </label>
-            <input
-              type="range"
-              min="0" max="10"
-              id='rating' 
-              value={score} 
-              onChange={e => setScore(e.target.value)}
-            />
-            <div className='feedback'>
-              <label>Give us feedbacks!  </label>
-              <textarea id='feedback' value={comment} onChange={e => setComment(e.target.value)} />
-            </div>
-            <button type="submit" >Submit</button>
+          <h2>Sign Up</h2>
+          <div className="Field">
+            <label htmlFor="firstName">
+              First name <sup>*</sup>
+            </label>
+            <input id="firstName" value={firstName} placeholder="First name" onChange={ e => setFirstName(e.target.value)}/>
           </div>
+          <div className="Field">
+            <label htmlFor="lastName">Last name</label>
+            <input id="lastName" value={lastName}placeholder="Last name" onChange={ e => setLastName(e.target.value)}/>
+          </div>
+          <div className="Field">
+            <label htmlFor="email">
+              Email address <sup>*</sup>
+            </label>
+            <input id="email" value={email} placeholder="Email address" onChange={ e => setEmail(e.target.value)} />
+          </div>
+          <div className="Field">
+            <label htmlFor="password">
+              Password <sup>*</sup>
+            </label>
+            <input 
+              id="password" 
+              type="password"
+              value={password.value} 
+              placeholder="Password" 
+              onChange={e => setPassword({...password, value: e.target.value})}
+              onBlur={setPassword({...password,isTouched: true})}
+            />
+            {password.isTouched && password.value.length < 8 ? (<PasswordErrorMessage />) : null};
+          </div>
+          <div className="Field">
+            <label>
+              Role <sup>*</sup>
+            </label>
+            <select value={role} onChange={e => setRole(e.target.value)}>
+              <option value="role">Role</option>
+              <option value="individual">Individual</option>
+              <option value="business">Business</option>
+            </select>
+          </div>
+          <button type="submit" disabled={!getIsFormValid()}>
+            Create account
+          </button>
         </fieldset>
       </form>
-    </div>  
-  )
-};
+    </div>
+  );
+}
 
 export default App;
