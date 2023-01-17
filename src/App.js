@@ -1,57 +1,48 @@
-import "./App.css";
 import { useState } from "react";
 
-function ListOfGoals(props) {
-    return (
-      <ul>
-        {props.allGoals.map((g) => (
-          <li>
-            <span>My goal is to {g.goal}, by {g.by}</span>
-          </li>
-        ))}
-      </ul>
-    );
+export default function App() {
+  const [giftCard, setGiftCard] = useState(
+    {
+      firstName: "Jennifer",
+      lastName: "Smith",
+      text: "Free dinner for 4 guests",
+      valid: true,
+      instructions: "To use your coupon, click the button below.",
+    }
+  );
+
+  function spendGiftCard() {
+    setGiftCard(prevState => {
+      return {
+        ...prevState,
+        text: "Your coupon has been used.",
+        valid: false,
+        instructions: "Please visit our restaurant to renew your gift card",
+      }
+    });
   }
 
-function GoalForm(props) {
-
-  const [formData,setFormData] = useState({
-    goal: "",
-    by:"",
-  })
-
-  function changeHandler (e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
-  
-  function submitHandler (e) {
-    e.preventDefault();
-    props.onAdd(formData);
-    setFormData({goal:"", by:""})
-  }
-
-
-    return (
-      <form onSubmit={submitHandler}>
-        <input type="text" name="goal" placeholder="Goal" value={formData.goal} onChange={changeHandler}></input>
-        <input type="text" name="by" placeholder="by..." value={formData.by} onChange={changeHandler}></input>
-        <button type="submit">Submit your goal</button>
-      </form>
-    )
-}
-
-function App() {
-
-  const [allGoals,updateAllGoals] = useState([]);
-  
-  const addGoal = (goal) => { updateAllGoals([...allGoals, goal]); }
-  
   return (
-    <div className="App">
-      <GoalForm onAdd={addGoal}/>
-      <ListOfGoals allGoals={allGoals}/>
+    <div style={{padding: '40px'}}>
+      <h1>
+        Gift Card Page
+      </h1>
+      <h2>
+        Customer: {giftCard.firstName} {giftCard.lastName}
+      </h2>
+      <h3>
+        {giftCard.text}
+      </h3>
+      <p>
+        {giftCard.instructions}
+      </p>
+      {
+        giftCard.valid && (
+          <button onClick={spendGiftCard}>
+            Spend Gift Card
+          </button>
+        )
+      }
     </div>
   );
 }
-
-export default App;
