@@ -1,97 +1,55 @@
-// import "./App.css";
+import "./App.css";
 import { useState } from "react";
-import * as EmailValidator from 'email-validator';
 
-const PasswordErrorMessage = () => {
-  return (
-    <p className="FieldError">Password should have at least 8 characters</p>
-  );
-};
+function ListOfGoals(props) {
+    return (
+      <ul>
+        {props.allGoals.map((g) => (
+          <li>
+            <span>My goal is to {g.goal}, by {g.by}</span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+function GoalForm(props) {
+
+  const [formData,setFormData] = useState({
+    goal: "",
+    by:"",
+  })
+
+  function changeHandler (e) {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
+  
+  function submitHandler (e) {
+    e.preventDefault();
+    props.onAdd(formData);
+    setFormData({goal:"", by:""})
+  }
+
+
+    return (
+      <form onSubmit={submitHandler}>
+        <input type="text" name="goal" placeholder="Goal" value={formData.goal} onChange={changeHandler}></input>
+        <input type="text" name="by" placeholder="by..." value={formData.by} onChange={changeHandler}></input>
+        <button type="submit">Submit your goal</button>
+      </form>
+    )
+}
 
 function App() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState({
-    value: "",
-    isTouched: false,
-  });
-  const [role, setRole] = useState("role");
 
-  const getIsFormValid = () => {
-    return (
-      firstName &&
-      EmailValidator.validate(email) &&
-      password.value.length >=8 &&
-      role !== "role"
-    )
-  };
-
-  const clearForm = () => {
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPassword('');
-    setPassword({value:"", isTouched: false});
-    setRole("Role");
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Account created!");
-    clearForm();
-  };
-
+  const [allGoals,updateAllGoals] = useState([]);
+  
+  const addGoal = (goal) => { updateAllGoals([...allGoals, goal]); }
+  
   return (
     <div className="App">
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <h2>Sign Up</h2>
-          <div className="Field">
-            <label htmlFor="firstName">
-              First name <sup>*</sup>
-            </label>
-            <input id="firstName" value={firstName} placeholder="First name" onChange={ e => setFirstName(e.target.value)}/>
-          </div>
-          <div className="Field">
-            <label htmlFor="lastName">Last name</label>
-            <input id="lastName" value={lastName}placeholder="Last name" onChange={ e => setLastName(e.target.value)}/>
-          </div>
-          <div className="Field">
-            <label htmlFor="email">
-              Email address <sup>*</sup>
-            </label>
-            <input id="email" value={email} placeholder="Email address" onChange={ e => setEmail(e.target.value)} />
-          </div>
-          <div className="Field">
-            <label htmlFor="password">
-              Password <sup>*</sup>
-            </label>
-            <input 
-              id="password" 
-              type="password"
-              value={password.value} 
-              placeholder="Password" 
-              onChange={e => setPassword({...password, value: e.target.value})}
-              onBlur={setPassword({...password,isTouched: true})}
-            />
-            {password.isTouched && password.value.length < 8 ? (<PasswordErrorMessage />) : null};
-          </div>
-          <div className="Field">
-            <label>
-              Role <sup>*</sup>
-            </label>
-            <select value={role} onChange={e => setRole(e.target.value)}>
-              <option value="role">Role</option>
-              <option value="individual">Individual</option>
-              <option value="business">Business</option>
-            </select>
-          </div>
-          <button type="submit" disabled={!getIsFormValid()}>
-            Create account
-          </button>
-        </fieldset>
-      </form>
+      <GoalForm onAdd={addGoal}/>
+      <ListOfGoals allGoals={allGoals}/>
     </div>
   );
 }
