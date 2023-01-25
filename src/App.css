@@ -4,7 +4,6 @@
 }
 
 div {
-  padding: 30px;
 }
 
 .App-logo {
@@ -40,4 +39,38 @@ div {
   to {
     transform: rotate(360deg);
   }
+}
+
+form {
+  text-align: left;
+  width: 400px;
+  padding: 30px;
+}
+
+fieldset {
+  padding: 30px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 7px;
+  width: 100%;
+  background: grey;
+  border-radius: 5px;
+  background-image: linear-gradient(#d46a6a, #d46a6a);
+  background-repeat: no-repeat;
+}
+
+textarea {
+  height: 100px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.comments {
+  padding-top: 35px;
+}
+
+.submitButton {
+  width: 100%;
 }
